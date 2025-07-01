@@ -21,6 +21,7 @@ async function findById(id) {
       logger.warn({ id }, 'Product not found');
       throw error;
     }
+    logger.info({ id, product: product }, 'Product updated');
     return product;
   } catch (err) {
     if (!err.status) {
