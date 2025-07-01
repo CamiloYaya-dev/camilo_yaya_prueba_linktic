@@ -4,9 +4,12 @@ const productRoutes = require('./routes/product.routes');
 const healthRoutes = require('./routes/health.routes');
 const errorHandler = require('./middlewares/errorHandler');
 const auth = require('./middlewares/auth');
+const { swaggerUi, swaggerSpec } = require('./swagger');
 
 const app = express();
 app.use(express.json());
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/products', auth, productRoutes);
 app.use('/health', healthRoutes);
