@@ -4,7 +4,11 @@ const axios = require('axios');
 
 async function getProductDetails(productId) {
   try {
-    const res = await axios.get(`http://localhost:3000/products/${productId}`);
+    const res = await axios.get(`http://localhost:3000/products/${productId}`, {
+      headers: {
+        'x-api-key': process.env.PRODUCTS_SERVICE_API_KEY
+      }
+    });
     return res.data.data.attributes;
   } catch (err) {
     throw new Error('Product not found in product service');

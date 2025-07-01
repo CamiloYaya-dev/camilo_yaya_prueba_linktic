@@ -1,11 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const productRoutes = require('./routes/product.routes');
 const healthRoutes = require('./routes/health.routes');
 const errorHandler = require('./middlewares/errorHandler');
+const auth = require('./middlewares/auth');
 
 const app = express();
 app.use(express.json());
-app.use('/products', productRoutes);
+
+app.use('/products', auth, productRoutes);
 app.use('/health', healthRoutes);
 
 app.use((req, res, next) => {
