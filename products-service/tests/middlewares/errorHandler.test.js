@@ -1,20 +1,22 @@
 const errorHandler = require('../../src/middlewares/errorHandler');
+const logger = require('../../src/utils/logger');
+
+jest.mock('../../src/utils/logger');
 
 describe('errorHandler middleware', () => {
   let req, res, next;
 
   beforeEach(() => {
-    req = {};
+    req = {
+      method: 'GET',
+      originalUrl: '/test-route',
+    };
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     };
     next = jest.fn();
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   test('should handle errors with status and message', () => {
@@ -22,7 +24,14 @@ describe('errorHandler middleware', () => {
 
     errorHandler(err, req, res, next);
 
-    expect(console.error).toHaveBeenCalledWith('[ERROR]', 'Not Found');
+    expect(logger.error).toHaveBeenCalledWith(expect.objectContaining({
+      msg: 'Unhandled error',
+      method: 'GET',
+      url: '/test-route',
+      status: 404,
+      error: 'Not Found',
+    }));
+
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({
       errors: [{ status: 404, detail: 'Not Found' }],
@@ -34,7 +43,14 @@ describe('errorHandler middleware', () => {
 
     errorHandler(err, req, res, next);
 
-    expect(console.error).toHaveBeenCalledWith('[ERROR]', undefined);
+    expect(logger.error).toHaveBeenCalledWith(expect.objectContaining({
+      msg: 'Unhandled error',
+      method: 'GET',
+      url: '/test-route',
+      status: 500,
+      error: undefined,
+    }));
+
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
       errors: [{ status: 500, detail: 'Internal Server Error' }],
