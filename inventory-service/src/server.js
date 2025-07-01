@@ -9,5 +9,6 @@ sequelize.sync().then(() => {
   logger.info('Database synced');
   app.listen(PORT, () => {
     logger.info(`Inventory service running on port ${PORT}`);
+    logger.info(`Swagger docs available at http://localhost:${PORT}/docs`);
   });
 });

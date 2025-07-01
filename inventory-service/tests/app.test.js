@@ -6,7 +6,9 @@ jest.mock('../src/utils/logger');
 
 describe('App Integration', () => {
   test('should respond to /inventory/unknown with 400 for invalid productId', async () => {
-    const res = await request(app).get('/inventory/unknown');
+    const res = await request(app)
+    .get('/inventory/unknown')
+    .set('x-api-key', process.env.INTERNAL_API_KEY);
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty('errors');
     expect(res.body.errors[0].detail).toBe('Invalid product ID');
