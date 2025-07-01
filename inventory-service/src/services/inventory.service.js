@@ -2,9 +2,11 @@ const Inventory = require('../models/inventory.model');
 const logger = require('../utils/logger');
 const axios = require('axios');
 
+const baseUrl = process.env.PRODUCTS_SERVICE_BASE_URL;
+
 async function getProductDetails(productId) {
   try {
-    const res = await axios.get(`http://localhost:3000/products/${productId}`, {
+    const res = await axios.get(`${baseUrl}/products/${productId}`, {
       headers: {
         'x-api-key': process.env.PRODUCTS_SERVICE_API_KEY
       }
