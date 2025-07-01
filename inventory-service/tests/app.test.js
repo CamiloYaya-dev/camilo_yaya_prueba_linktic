@@ -22,8 +22,16 @@ describe('App Integration', () => {
   test('should respond to /health with status ok', async () => {
     const res = await request(app).get('/health');
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ status: 'ok' });
-    expect(logger.info).toHaveBeenCalledWith({ msg: 'Health check passed', status: 'ok' });
+    expect(res.body).toEqual({
+      status: 'ok',
+      database: 'up'
+    });
+    expect(logger.info).toHaveBeenCalledWith({
+      msg: 'Health check passed',
+      status: 'ok',
+      database: 'up'
+    });
+
   });
 
   test('should return 404 for unknown route', async () => {
