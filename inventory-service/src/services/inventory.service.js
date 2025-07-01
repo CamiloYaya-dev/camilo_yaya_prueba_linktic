@@ -23,13 +23,22 @@ async function getInventoryByProductId(productId) {
       error.status = 404;
       throw error;
     }
+
+    const productData = await getProductDetails(productId);
+    delete productData.id;
     logger.info({ msg: 'Inventory fetched', productId });
-    return inventory;
+
+    return {
+      productId: inventory.productId,
+      quantity: inventory.quantity,
+      ...productData,
+    };
   } catch (err) {
     logger.error({ msg: 'Error retrieving inventory', error: err.message });
     throw err;
   }
 }
+
 
 async function updateInventory(productId, quantity) {
   try {
