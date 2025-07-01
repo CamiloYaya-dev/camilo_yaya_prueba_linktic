@@ -18,7 +18,10 @@ describe('App Integration', () => {
   });
 
   test('should respond to /products (even if empty)', async () => {
-    const res = await request(app).get('/products');
+    const res = await request(app)
+      .get('/products')
+      .set('x-api-key', process.env.INTERNAL_API_KEY);
+
     expect([200, 500]).toContain(res.statusCode);
   });
 });
